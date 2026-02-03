@@ -42,6 +42,21 @@ public class ScheduleService {
         //List<>
     //}
     //선택 일정 조회
+    @Transactional(readOnly = true)
+    public GetScheduleResponse findOne(Long scheduleId){
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                () -> new IllegalStateException("선택한 일정이 없습니다.")
+        );
+        return new GetScheduleResponse(
+                schedule.getId(),
+                schedule.getTitle(),
+                schedule.getContent(),
+                schedule.getUserName(),
+                schedule.getCreatedAt(),
+                schedule.getModifiedAt()
+        );
+    }
+
     //선택 일정 수정
     //선택 일정 삭제
 
