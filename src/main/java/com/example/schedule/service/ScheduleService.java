@@ -1,14 +1,14 @@
 package com.example.schedule.service;
 
-import com.example.schedule.dto.CreateScheduleRequest;
-import com.example.schedule.dto.CreateScheduleResponse;
-import com.example.schedule.dto.GetScheduleResponse;
+import com.example.schedule.dto.*;
 import com.example.schedule.entity.Schedule;
 import com.example.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -38,9 +38,28 @@ public class ScheduleService {
     }
 
     //전체 일정 조회
-    //public List<GetScheduleResponse> getAll() {
-        //List<>
-    //}
+    @Transactional(readOnly = true)
+    public List<GetScheduleResponse> findAll(String userName){
+        List<Schedule> schedules = scheduleRepository.findByUserName(userName);
+
+        List<GetScheduleResponse> dtos = new ArrayList<>();
+        for (Schedule schedule : schedules) {
+            GetScheduleResponse dto = new GetScheduleResponse(
+                    schedule.getId(),
+                    schedule.getTitle(),
+                    schedule.getContent(),
+                    schedule.getUserName(),
+                    schedule.getCreatedAt(),
+                    schedule.getModifiedAt()
+            );
+            dtos.add(dto);
+        }
+
+        //수정일 기준으로 내림차순 정렬
+        dtos.sort(Comparator.comparing(GetScheduleResponse::getModifiedAt).reversed());
+        return dtos;
+    }
+
     //선택 일정 조회
     @Transactional(readOnly = true)
     public GetScheduleResponse findOne(Long scheduleId){
