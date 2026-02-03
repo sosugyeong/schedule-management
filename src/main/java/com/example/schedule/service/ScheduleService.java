@@ -58,6 +58,15 @@ public class ScheduleService {
     }
 
     //선택 일정 수정
+    @Transactional
+    public UpdateScheduleResponse updateInfo(Long scheduleId, UpdateScheduleRequest request){
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                () -> new IllegalStateException("선택한 일정이 없습니다.")
+        );
+        schedule.updateSchedule(request.getTitle(), request.getUserName());
+        return new UpdateScheduleResponse(schedule.getId());
+    }
+
     //선택 일정 삭제
 
 }
