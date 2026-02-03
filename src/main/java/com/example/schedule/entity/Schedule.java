@@ -23,7 +23,7 @@ public class Schedule extends BaseEntity{
     private String title;
 
     @Column(length = 200, nullable = false)
-    private String comment;
+    private String content;
 
     @Column(nullable = false)
     private String userName;
@@ -32,10 +32,16 @@ public class Schedule extends BaseEntity{
     private String password;
 
 
-    public Schedule(String title, String comment, String userName, String password){
+    public Schedule(String title, String content, String userName, String password){
         this.title = title;
-        this.comment = comment;
+        this.content = content;
         this.userName = userName;
         this.password = password;
+    }
+
+    //일정 수정(일정제목, 작성자명)
+    public void updateSchedule(String title, String userName){
+        this.title = title;
+        this.userName = userName;
     }
 }
