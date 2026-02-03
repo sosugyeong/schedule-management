@@ -68,5 +68,12 @@ public class ScheduleService {
     }
 
     //선택 일정 삭제
-
+    @Transactional
+    public void delete(Long scheduleId){
+        boolean existence = scheduleRepository.existsById(scheduleId);
+        if(!existence){
+            throw new IllegalStateException("없는 일정입니다.");
+        }
+        scheduleRepository.deleteById(scheduleId);
+    }
 }
