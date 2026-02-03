@@ -83,7 +83,13 @@ public class ScheduleService {
                 () -> new IllegalStateException("선택한 일정이 없습니다.")
         );
         schedule.updateSchedule(request.getTitle(), request.getUserName());
-        return new UpdateScheduleResponse(schedule.getId());
+        return new UpdateScheduleResponse(
+                schedule.getId(),
+                schedule.getTitle(),
+                schedule.getContent(),
+                schedule.getUserName(),
+                schedule.getModifiedAt()
+        );
     }
 
     //선택 일정 삭제
