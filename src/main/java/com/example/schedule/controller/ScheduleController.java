@@ -27,6 +27,10 @@ public class ScheduleController {
     //전체 일정 조회
 
     //선택 일정 조회
+    @GetMapping("/schedule/{scheduleId}")
+    public ResponseEntity<GetScheduleResponse> getSchedule(@PathVariable Long scheduleId){
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findOne(scheduleId));
+    }
 
     //선택 일정 수정
 
