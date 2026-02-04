@@ -19,7 +19,7 @@ public class ScheduleController {
     @PostMapping("/schedules")
     public ResponseEntity<CreateScheduleResponse> create(@RequestBody CreateScheduleRequest request){
         CreateScheduleResponse result = scheduleService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.save(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     //전체 일정 조회
