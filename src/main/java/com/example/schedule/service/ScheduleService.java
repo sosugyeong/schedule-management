@@ -40,7 +40,7 @@ public class ScheduleService {
     //전체 일정 조회
     @Transactional(readOnly = true)
     public List<GetScheduleResponse> findAll(String userName){
-        List<Schedule> schedules = scheduleRepository.findByUserName(userName);
+        List<Schedule> schedules = scheduleRepository.findByUserNameOrderByModifiedAtDesc(userName);
 
         List<GetScheduleResponse> dtos = new ArrayList<>();
         for (Schedule schedule : schedules) {
@@ -56,8 +56,8 @@ public class ScheduleService {
         }
 
         //수정일 기준으로 내림차순 정렬
-        dtos.sort(Comparator.comparing(GetScheduleResponse::getModifiedAt).reversed());
-        return dtos;
+        //dtos.sort(Comparator.comparing(GetScheduleResponse::getModifiedAt).reversed());
+        return (dtos != null)? dtos:null;
     }
 
     //선택 일정 조회

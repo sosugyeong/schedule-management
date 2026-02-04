@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-    List<Schedule> findByUserName(String userName);
+    //List<Schedule> findByUserName(String userName);
+    List<Schedule> findByUserNameOrderByModifiedAtDesc(String userName);
 }
