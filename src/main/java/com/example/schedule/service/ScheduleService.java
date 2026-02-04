@@ -3,6 +3,10 @@ package com.example.schedule.service;
 import com.example.schedule.dto.*;
 import com.example.schedule.entity.Comment;
 import com.example.schedule.entity.Schedule;
+import com.example.schedule.exception.CommentLengthException;
+import com.example.schedule.exception.ContentLengthException;
+import com.example.schedule.exception.NullException;
+import com.example.schedule.exception.TitleLengthException;
 import com.example.schedule.repository.CommentRepository;
 import com.example.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,25 @@ public class ScheduleService {
     //저장 (일정 생성)
     @Transactional
     public CreateScheduleResponse save(CreateScheduleRequest request){
+        if ("".equals(request.getTitle()) || request.getTitle() == null){
+            throw new NullException("제목은 null이거나 공백일 수 없습니다.");
+        }
+        if ("".equals(request.getContent()) || request.getContent() == null){
+            throw new NullException("일정 내용은 null이거나 공백일 수 없습니다.");
+        }
+        if ("".equals(request.getPassword()) || request.getPassword() == null){
+            throw new NullException("비밀번호는 null이거나 공백일 수 없습니다.");
+        }
+        if ("".equals(request.getUserName()) || request.getUserName() == null){
+            throw new NullException("이름은 null이거나 공백일 수 없습니다.");
+        }
+        if (request.getTitle().length() > 30){
+            throw new TitleLengthException("제목은 30자를 넘을 수 없습니다.");
+        }
+        if (request.getContent().length() > 200){
+            throw new ContentLengthException("내용은 200자를 넘을 수 없습니다.");
+        }
+
         Schedule schedule = new Schedule(
                 request.getTitle(),
                 request.getContent(),
@@ -102,8 +125,17 @@ public class ScheduleService {
                 () -> new IllegalStateException("선택한 일정이 없습니다.")
         );
 
+        if ("".equals(request.getTitle()) || request.getTitle() == null){
+            throw new NullException("제목은 null이거나 공백일 수 없습니다.");
+        }
+        if ("".equals(request.getUserName()) || request.getUserName() == null){
+            throw new NullException("이름은 null이거나 공백일 수 없습니다.");
+        }
         if(!schedule.getPassword().equals(request.getPassword())){
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+        }
+        if (request.getTitle().length() > 30){
+            throw new TitleLengthException("제목은 30자를 넘을 수 없습니다.");
         }
 
         schedule.updateSchedule(request.getTitle(), request.getUserName());
