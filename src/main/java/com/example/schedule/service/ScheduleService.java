@@ -1,14 +1,15 @@
 package com.example.schedule.service;
 
 import com.example.schedule.dto.*;
+import com.example.schedule.entity.Comment;
 import com.example.schedule.entity.Schedule;
+import com.example.schedule.repository.CommentRepository;
 import com.example.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -16,6 +17,7 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
 
     //저장 (일정 생성)
     @Transactional
@@ -62,17 +64,34 @@ public class ScheduleService {
 
     //선택 일정 조회
     @Transactional(readOnly = true)
-    public GetScheduleResponse findOne(Long scheduleId){
+    public GetScheduleCommentResponse.GetSchedule findOne(Long scheduleId){
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new IllegalStateException("선택한 일정이 없습니다.")
         );
-        return new GetScheduleResponse(
+
+        List<Comment> comment = commentRepository.findByScheduleId(scheduleId);
+
+        //댓글 리스트를 GetComment 리스트로 변환
+        List<GetScheduleCommentResponse.GetComment> dtos = new ArrayList<>();
+        for(Comment comments : comment){
+            GetScheduleCommentResponse.GetComment dto = new GetScheduleCommentResponse.GetComment(
+                    comments.getId(),
+                    comments.getComment(),
+                    comments.getUserName(),
+                    comments.getCreatedAt(),
+                    comments.getModifiedAt()
+            );
+            dtos.add(dto);
+        }
+
+        return new GetScheduleCommentResponse.GetSchedule(
                 schedule.getId(),
                 schedule.getTitle(),
                 schedule.getContent(),
                 schedule.getUserName(),
                 schedule.getCreatedAt(),
-                schedule.getModifiedAt()
+                schedule.getModifiedAt(),
+                dtos //생성한 댓글 리스트를 넣음
         );
     }
 
