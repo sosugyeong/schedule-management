@@ -10,6 +10,6 @@ public class CreateScheduleRequest {
     private String content;
     private String userName;
     private String password;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+//    private LocalDateTime createdAt;
+//    private LocalDateTime modifiedAt;
 }
