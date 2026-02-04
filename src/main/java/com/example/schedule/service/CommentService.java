@@ -17,6 +17,11 @@ public class CommentService {
     //댓글 생성
     @Transactional
     public CreateCommentResponse save(Long scheduleId, CreateCommentRequest request){
+        long num = commentRepository.countByScheduleId(scheduleId);
+        if (num >= 10){
+            throw new IllegalStateException("댓글 갯수는 10개를 넘을 수 없습니다.");
+        }
+
         Comment comment = new Comment(
                 scheduleId,
                 request.getComment(),
@@ -31,6 +36,5 @@ public class CommentService {
                 saveComment.getModifiedAt()
         );
     }
-
 
 }
