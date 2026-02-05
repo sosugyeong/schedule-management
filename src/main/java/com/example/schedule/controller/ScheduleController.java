@@ -23,8 +23,8 @@ public class ScheduleController {
     }
 
     //전체 일정 조회
-    @GetMapping("/schedules/search/{userName}")
-    public ResponseEntity<List<GetScheduleResponse>> getSchedule(@PathVariable String userName){
+    @GetMapping("/schedules")
+    public ResponseEntity<List<GetScheduleResponse>> getSchedule(@RequestParam(name="userName") String userName){
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findAll(userName));
     }
 
