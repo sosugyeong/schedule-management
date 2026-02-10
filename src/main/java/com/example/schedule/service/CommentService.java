@@ -1,7 +1,7 @@
 package com.example.schedule.service;
 
-import com.example.schedule.dto.CreateCommentRequest;
-import com.example.schedule.dto.CreateCommentResponse;
+import com.example.schedule.dto.comment.CreateCommentRequest;
+import com.example.schedule.dto.comment.CreateCommentResponse;
 import com.example.schedule.entity.Comment;
 import com.example.schedule.exception.CommentLengthException;
 import com.example.schedule.exception.NullException;

@@ -1,6 +1,7 @@
 package com.example.schedule.controller;
 
-import com.example.schedule.dto.*;
+import com.example.schedule.dto.comment.CreateCommentRequest;
+import com.example.schedule.dto.comment.CreateCommentResponse;
 import com.example.schedule.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

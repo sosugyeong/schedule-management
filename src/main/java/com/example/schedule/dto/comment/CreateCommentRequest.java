@@ -1,8 +1,6 @@
-package com.example.schedule.dto;
+package com.example.schedule.dto.comment;
 
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class CreateCommentRequest {

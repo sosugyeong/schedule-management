@@ -1,15 +1,15 @@
-package com.example.schedule.dto;
+package com.example.schedule.dto.schedule;
 
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class CreateScheduleRequest {
+public class GetScheduleRequest {
     private String title;
     private String content;
     private String userName;
     private String password;
-//    private LocalDateTime createdAt;
-//    private LocalDateTime modifiedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 }

@@ -1,9 +1,8 @@
 package com.example.schedule.service;
 
-import com.example.schedule.dto.*;
+import com.example.schedule.dto.schedule.*;
 import com.example.schedule.entity.Comment;
 import com.example.schedule.entity.Schedule;
-import com.example.schedule.exception.CommentLengthException;
 import com.example.schedule.exception.ContentLengthException;
 import com.example.schedule.exception.NullException;
 import com.example.schedule.exception.TitleLengthException;
