@@ -1,5 +1,6 @@
 package com.example.schedule.service;
 
+import com.example.schedule.config.PasswordEncoder;
 import com.example.schedule.dto.user.*;
 import com.example.schedule.entity.User;
 import com.example.schedule.repository.UserRepository;
@@ -16,15 +17,19 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     //유저 생성
     @Transactional
     public SignupResponse save(@Valid SignupRequest request){
+        String password = passwordEncoder.encode(request.getPassword());
+
         User user = new User(
                 request.getUserName(),
                 request.getEmail(),
-                request.getPassword()
+                password
         );
+
 
         User savedUser = userRepository.save(user);
         return new SignupResponse(
@@ -37,11 +42,11 @@ public class UserService {
 
     //유저 전체 조회
     @Transactional(readOnly = true)
-    public List<GetUserResponse> findAll(){
+    public List<GetAllUserResponse> findAll(){
         List<User> users = userRepository.findAll();
-        List<GetUserResponse> dtos = new ArrayList<>();
+        List<GetAllUserResponse> dtos = new ArrayList<>();
         for(User user : users){
-            GetUserResponse dto = new GetUserResponse(
+            GetAllUserResponse dto = new GetAllUserResponse(
                     user.getId(),
                     user.getUserName(),
                     user.getEmail()
@@ -61,7 +66,8 @@ public class UserService {
         return new GetUserResponse(
                 user.getId(),
                 user.getUserName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getPassword()
         );
     }
 
@@ -71,6 +77,10 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("선택한 유저가 없습니다.")
         );
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())){
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+        }
 
         user.updateUser(request.getUserName(), request.getEmail(), request.getPassword());
         return new UpdateUserResponse(
@@ -98,6 +108,10 @@ public class UserService {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new IllegalStateException("없는 유저입니다.")
         );
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())){
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+        }
 
         return new SessionUser(
                 user.getId(),

@@ -39,7 +39,7 @@ public class UserController {
 
     //전체 유저 조회
     @GetMapping("/users")
-    public ResponseEntity<List<GetUserResponse>> getUser(){
+    public ResponseEntity<List<GetAllUserResponse>> getUser(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
