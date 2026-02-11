@@ -3,7 +3,6 @@ package com.example.schedule.service;
 import com.example.schedule.dto.user.*;
 import com.example.schedule.entity.User;
 import com.example.schedule.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class UserService {
 
     //유저 생성
     @Transactional
-    public SignupResponse save(SignupRequest request){
+    public SignupResponse save(@Valid SignupRequest request){
         User user = new User(
                 request.getUserName(),
                 request.getEmail(),
@@ -68,7 +67,7 @@ public class UserService {
 
     //유저 수정
     @Transactional
-    public UpdateUserResponse update(Long id, UpdateUserRequest request){
+    public UpdateUserResponse update(Long id, @Valid UpdateUserRequest request){
         User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("선택한 유저가 없습니다.")
         );

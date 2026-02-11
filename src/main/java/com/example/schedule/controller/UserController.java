@@ -20,7 +20,7 @@ public class UserController {
 
     //유저 생성(회원가입)
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
+    public ResponseEntity<SignupResponse> signup(@Valid @RequestBody SignupRequest request) {
         SignupResponse result = userService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }

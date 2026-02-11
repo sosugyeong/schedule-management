@@ -14,15 +14,10 @@ public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     //일정고유식별자
     private Long scheduleId;
-
-    @Column(length = 200, nullable = false)
     private String comment;
-    @Column(nullable = false)
     private String userName;
-    @Column(nullable = false)
     private String password;
 
     public Comment(Long scheduleId, String comment, String userName, String password) {
