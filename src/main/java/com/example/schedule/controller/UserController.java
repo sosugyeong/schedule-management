@@ -1,7 +1,6 @@
 package com.example.schedule.controller;
 
 import com.example.schedule.dto.user.*;
-import com.example.schedule.entity.User;
 import com.example.schedule.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -45,9 +44,10 @@ public class UserController {
     }
 
     //선택 유저 조회
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<GetUserResponse> getUser(@PathVariable Long userId){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findById(userId));
+    @GetMapping("/users/myinfo")
+    public ResponseEntity<GetUserResponse> getUser(
+            @SessionAttribute(name = "loginUser", required = false) SessionUser sessionUser){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findById(sessionUser.getId()));
     }
 
     //선택 유저 수정
@@ -60,9 +60,10 @@ public class UserController {
     }
 
     //선택 유저 삭제
-    @DeleteMapping("/users/{userId}")
-    public ResponseEntity<Void> deleteUSer(@PathVariable Long userId){
-        userService.delete(userId);
+    @DeleteMapping("/users")
+    public ResponseEntity<Void> deleteUser(
+            @SessionAttribute(name = "loginUser", required = false) SessionUser sessionUser){
+        userService.delete(sessionUser.getId());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
