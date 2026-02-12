@@ -6,8 +6,9 @@
 ## 💻 프로젝트 소개
 - 일정 생성, 조회, 수정, 삭제 구현
 - 일정에 댓글 생성 구현
-- 유저 입력 검증
-
+- 회원가입 / 로그인(인증) 구현
+- 비밀번호 암호화
+- Validation 예외처리
 
 ---
 # 🧾 API 명세서
@@ -193,31 +194,5 @@
 ---
 
 # ERD
-<img width="622" height="464" alt="스크린샷 2026-02-04 232658" src="https://github.com/user-attachments/assets/bd02c9ea-4f76-419d-8cc8-85484ce226be" /> <br>
-```mermaid
-erDiagram
-    BASE_ENTITY ||--o| SCHEDULE : "fields embedded in"
-    BASE_ENTITY ||--o| COMMENT : "fields embedded in"
-    SCHEDULE ||--o{ COMMENT : "1:N Relationship"
+<img width="943" height="783" alt="스크린샷 2026-02-13 024037" src="https://github.com/user-attachments/assets/f1aba586-54c1-4b9d-828d-ecd5c2fc4acc" />
 
-    BASE_ENTITY {
-        LocalDateTime createdAt
-        LocalDateTime modifiedAt
-    }
-
-    SCHEDULE {
-        Long id PK
-        String title
-        String content
-        String userName
-        String password
-    }
-
-    COMMENT {
-        Long id PK
-        Long scheduleId FK
-        String comment
-        String userName
-        String password
-    }
-```
