@@ -54,7 +54,13 @@ public class ScheduleService {
     //전체 일정 조회
     @Transactional(readOnly = true)
     public List<GetScheduleResponse> findAll(String userName){
-        List<Schedule> schedules = scheduleRepository.findByUserNameOrderByModifiedAtDesc(userName);
+        List<Schedule> schedules;
+        if(userName != null) {
+            schedules = scheduleRepository.findByUserNameOrderByModifiedAtDesc(userName);
+        } else {
+            schedules = scheduleRepository.findAll();
+        }
+
 
         List<GetScheduleResponse> dtos = new ArrayList<>();
         for (Schedule schedule : schedules) {
@@ -74,10 +80,11 @@ public class ScheduleService {
         return (dtos != null)? dtos:null;
     }
 
-    public Page<Schedule> findAll(int page){
+    /*
+    public Page<GetScheduleResponse> findPageAll(int page){
         Pageable pageable = PageRequest.of(page, 10);
-        return this.scheduleRepository.findAll(pageable);
-    }
+        return this.scheduleRepository.findPageAll(pageable);
+    }*/
 
     //선택 일정 조회
     @Transactional(readOnly = true)

@@ -2,9 +2,12 @@ package com.example.schedule.controller;
 
 import com.example.schedule.dto.schedule.*;
 import com.example.schedule.dto.user.SessionUser;
+import com.example.schedule.entity.Schedule;
+import com.example.schedule.repository.ScheduleRepository;
 import com.example.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,7 @@ import java.util.List;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
+    private final ScheduleRepository scheduleRepository;
 
     //일정 생성
     @PostMapping("/schedules")
@@ -28,9 +32,12 @@ public class ScheduleController {
     }
 
     //전체 일정 조회
+    //, @RequestParam(value = "page", defaultValue = "0") int page
     @GetMapping("/schedules")
     public ResponseEntity<List<GetScheduleResponse>> getSchedule(@RequestParam(name="userName", required = false) String userName){
+        //Page<GetScheduleResponse> paging = this.scheduleService.findAll(userName);
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findAll(userName));
+
     }
 
     //선택 일정 조회
