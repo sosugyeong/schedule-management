@@ -2,6 +2,7 @@ package com.example.schedule.controller;
 
 import com.example.schedule.dto.comment.CreateCommentRequest;
 import com.example.schedule.dto.comment.CreateCommentResponse;
+import com.example.schedule.dto.user.SessionUser;
 import com.example.schedule.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,12 @@ public class CommentController {
 
     //댓글 생성
     @PostMapping("/schedules/{scheduleId}/comments")
-    public ResponseEntity<CreateCommentResponse> create(@PathVariable Long scheduleId, @Valid @RequestBody CreateCommentRequest request){
-        CreateCommentResponse result = commentService.save(scheduleId, request);
+    public ResponseEntity<CreateCommentResponse> create(
+            @SessionAttribute(name = "loginUser", required = false) SessionUser sessionUser,
+            @PathVariable Long scheduleId,
+            @Valid @RequestBody CreateCommentRequest request
+    ){
+        CreateCommentResponse result = commentService.save(sessionUser.getId(), scheduleId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 }

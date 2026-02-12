@@ -35,8 +35,9 @@ public class Schedule extends BaseEntity{
     }
 
     //일정 수정(일정제목, 작성자명)
-    public void updateSchedule(String title, String userName){
+    public void updateSchedule(String title, String content, String userName){
         this.title = title;
+        this.content = content;
         this.userName = userName;
     }
 }

@@ -2,12 +2,16 @@ package com.example.schedule.service;
 
 import com.example.schedule.dto.comment.GetCommentResponse;
 import com.example.schedule.dto.schedule.*;
-import com.example.schedule.entity.Comment;
 import com.example.schedule.entity.Schedule;
+import com.example.schedule.entity.User;
 import com.example.schedule.repository.CommentRepository;
 import com.example.schedule.repository.ScheduleRepository;
+import com.example.schedule.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +25,15 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     //저장 (일정 생성)
     @Transactional
-    public CreateScheduleResponse save(@Valid CreateScheduleRequest request){
+    public CreateScheduleResponse save(Long userId, @Valid CreateScheduleRequest request){
+        User user = userRepository.findById(userId).orElseThrow( //db에 이 유저가 있는지 확인
+                () -> new IllegalStateException("사용자를 찾을 수 없습니다.")
+        );
+
         Schedule schedule = new Schedule(
                 request.getTitle(),
                 request.getContent(),
@@ -65,6 +74,11 @@ public class ScheduleService {
         return (dtos != null)? dtos:null;
     }
 
+    public Page<Schedule> findAll(int page){
+        Pageable pageable = PageRequest.of(page, 10);
+        return this.scheduleRepository.findAll(pageable);
+    }
+
     //선택 일정 조회
     @Transactional(readOnly = true)
     public GetScheduleCommentResponse findOne(Long scheduleId){
@@ -94,16 +108,18 @@ public class ScheduleService {
 
     //선택 일정 수정
     @Transactional
-    public UpdateScheduleResponse updateInfo(Long scheduleId, @Valid UpdateScheduleRequest request){
+    public UpdateScheduleResponse updateInfo(Long userId, Long scheduleId, @Valid UpdateScheduleRequest request){
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new IllegalStateException("선택한 일정이 없습니다.")
         );
-
+        User user = userRepository.findById(userId).orElseThrow( //db에 이 유저가 있는지 확인
+                () -> new IllegalStateException("사용자를 찾을 수 없습니다.")
+        );
         if(!schedule.getPassword().equals(request.getPassword())){
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }
 
-        schedule.updateSchedule(request.getTitle(), request.getUserName());
+        schedule.updateSchedule(request.getTitle(), request.getContent(), request.getUserName());
         return new UpdateScheduleResponse(
                 schedule.getId(),
                 schedule.getTitle(),
@@ -115,11 +131,13 @@ public class ScheduleService {
 
     //선택 일정 삭제
     @Transactional
-    public void delete(Long scheduleId, @Valid DeleteScheduleRequest request){
+    public void delete(Long userId, Long scheduleId, @Valid DeleteScheduleRequest request){
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new IllegalStateException("선택한 일정이 없습니다.")
         );
-
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalStateException("사용자를 찾을 수 없습니다.")
+        );
         //Schedule에 저장된 비밀번호와 입력된 비밀번호 비교
         if (!schedule.getPassword().equals(request.getPassword())) {
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");

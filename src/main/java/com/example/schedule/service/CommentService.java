@@ -4,8 +4,10 @@ import com.example.schedule.dto.comment.CreateCommentRequest;
 import com.example.schedule.dto.comment.CreateCommentResponse;
 import com.example.schedule.entity.Comment;
 import com.example.schedule.entity.Schedule;
+import com.example.schedule.entity.User;
 import com.example.schedule.repository.CommentRepository;
 import com.example.schedule.repository.ScheduleRepository;
+import com.example.schedule.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,11 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
     //댓글 생성
     @Transactional
-    public CreateCommentResponse save(Long scheduleId, @Valid CreateCommentRequest request){
+    public CreateCommentResponse save(Long userId, Long scheduleId, @Valid CreateCommentRequest request){
         long num = commentRepository.countByScheduleId(scheduleId);
         if (num >= 10){
             throw new IllegalStateException("댓글 갯수는 10개를 넘을 수 없습니다.");
